@@ -1,0 +1,17 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    url: ${AUTH_DATABASE_URL}
+    username: ${AUTH_DATABASE_USER}
+    password: ${AUTH_DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        jdbc:
+          lob:
+            non-contextual-creation: true
