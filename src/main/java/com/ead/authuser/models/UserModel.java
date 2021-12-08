@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 
@@ -13,10 +14,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Entity
 @Table(name = "tb_users")
-public class UserModel {
+public class UserModel extends RepresentationModel<UserModel> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

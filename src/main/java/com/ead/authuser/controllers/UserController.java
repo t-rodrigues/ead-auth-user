@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,6 +37,11 @@ public class UserController {
             @PageableDefault(page = 0, size = 10, sort = "updatedAt", direction = Sort.Direction.ASC) Pageable pageable) {
         var page = this.userService.findAll(spec, pageable);
 
+        if (page.hasContent()) {
+            page = page
+                    .map(user -> user.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel()));
+        }
+
         return ResponseEntity.ok().body(page);
     }
 
@@ -45,7 +53,10 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(userModel.get());
+        var user = userModel.get();
+        user.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel());
+
+        return ResponseEntity.ok().body(user);
     }
 
     @PutMapping("/{userId}")
@@ -64,6 +75,8 @@ public class UserController {
         userModel.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
         this.userService.save(userModel);
+
+        userModel.add(linkTo(methodOn(UserController.class).getUser(userModel.getId())).withSelfRel());
 
         return ResponseEntity.ok().body(userModel);
     }
@@ -87,6 +100,8 @@ public class UserController {
 
         this.userService.save(userModel);
 
+        userModel.add(linkTo(methodOn(UserController.class).getUser(userModel.getId())).withSelfRel());
+
         return ResponseEntity.ok().body(userModel);
     }
 
@@ -104,6 +119,8 @@ public class UserController {
         userModel.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
 
         this.userService.save(userModel);
+
+        userModel.add(linkTo(methodOn(UserController.class).getUser(userModel.getId())).withSelfRel());
 
         return ResponseEntity.ok().body(userModel);
     }
