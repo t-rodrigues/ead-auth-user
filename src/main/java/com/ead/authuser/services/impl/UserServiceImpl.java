@@ -3,6 +3,7 @@ package com.ead.authuser.services.impl;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserService;
+import com.ead.authuser.specifications.SpecificationTemplate.UserSpec;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserModel> findAll(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
+    public Page<UserModel> findAll(UserSpec spec, Pageable pageable) {
+        return this.userRepository.findAll(spec, pageable);
     }
 
 }
